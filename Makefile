@@ -14,4 +14,4 @@ include $(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon/compile.pr
 
 install:
 	cp -r data bin/audioIO.app/Contents/Resources
-	cp audioIO-Info.plist bin/audioIO.app/Contents/Info.plist
+	cp aio-Info.plist bin/audioIO.app/Contents/Info.plist
