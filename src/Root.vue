@@ -1,44 +1,25 @@
 <template>
   <div class="root">
-    <counter></counter>
-    <p>
-      Welcome to neodymium!
-    </p>
-    <p>
-      To get a better understanding of how this works, check out
-      <a href="http://soixantecircuits.github.io/nd" target="_blank" :style="'color: ' + color">its documentation</a>.
-      It is also recommended to go through the docs for
-      <a href="http://webpack.github.io/" target="_blank">Webpack</a> and
-      <a href="http://vuejs.github.io/vue-loader/" target="_blank">vue-loader</a>.
-      If you have any issues with the setup, please file an issue at this boilerplate's
-      <a href="https://github.com/soixantecircuits/nd" target="_blank">repository</a>.
-    </p>
+    <h1>a.io</h1>
   </div>
 </template>
 
 <script>
 'use strict'
 
-import Counter from './components/Counter'
 var settings = require('electron').remote.getGlobal('settings') // Global variable set in mainProcess
 
 export default {
-  data() {
-    return {
-      color: settings.color || '#42b983'
-    }
+  data () {
+    return {}
   },
-  components: {
-    Counter
-  },
-  mounted() {
-    this.$store.state.count = settings.count || 0
-  }
+  mounted() {}
 }
 </script>
 <style>
 html {
   height: 100%;
+  background: #E1E1E1;
   font-family: Source Sans Pro, Helvetica, sans-serif;
 }
 

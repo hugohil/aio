@@ -5,18 +5,9 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const state = {
-  count: 0
-}
+const state = {}
 
-const mutations = {
-  INCREMENT (state) {
-    state.count++
-  },
-  DECREMENT (state) {
-    state.count--
-  }
-}
+const mutations = {}
 
 const store = new Vuex.Store({
   state,
