@@ -1,19 +1,37 @@
 <template>
   <div class="root">
     <h1>a.io</h1>
+    <button :disabled="!isAudioAvailable" @click="toggle">{{ isAudioAnalyzing ? 'stop' : 'start' }}</button>
   </div>
 </template>
 
 <script>
 'use strict'
 
-var settings = require('electron').remote.getGlobal('settings') // Global variable set in mainProcess
+const settings = require('electron').remote.getGlobal('settings')
+
+import audio from './lib/audio'
 
 export default {
   data () {
-    return {}
+    return {
+      isAudioAvailable: false,
+      isAudioAnalyzing: false
+    }
   },
-  mounted() {}
+  methods: {
+    toggle () {
+      !this.isAudioAnalyzing && audio.getAnalyzer().start()
+      this.isAudioAnalyzing && audio.getAnalyzer().stop()
+      this.isAudioAnalyzing = !this.isAudioAnalyzing
+    },
+  },
+  mounted () {
+    audio.init().then(() => {
+      console.info(audio.getAnalyzer())
+      this.isAudioAvailable = true
+    })
+  }
 }
 </script>
 <style>

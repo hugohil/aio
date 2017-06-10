@@ -1,1 +1,7 @@
-{}
+{
+  "audio": {
+    "featureExtractors": ["rms", "spectralCentroid", "powerSpectrum", "amplitudeSpectrum", "loudness"],
+    "label": "default",
+    "bufferSize": 512
+  }
+}
