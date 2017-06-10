@@ -1,6 +1,6 @@
 {
   "audio": {
-    "featureExtractors": ["rms", "spectralCentroid", "powerSpectrum", "amplitudeSpectrum", "loudness"],
+    "featureExtractors": ["rms", "spectralCentroid", "spectralFlatness", "loudness"],
     "label": "default",
     "bufferSize": 512
   }

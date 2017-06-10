@@ -3,7 +3,7 @@
     <h1>a.io</h1>
     <button :disabled="!isAudioAvailable" @click="toggle">{{ isAudioAnalyzing ? 'stop' : 'start' }}</button>
     <div v-for="(value, name) in features">
-      <p>{{ name }}: {{ value }}</p>
+      <p>{{ name }}: <span class="indicator" :style="{ width: getWidth(value) }"></span></p>
     </div>
   </div>
 </template>
@@ -23,6 +23,10 @@ export default {
     }
   },
   methods: {
+    getWidth (raw) {
+      let value = Math.round(raw < 1 ? raw * 100 : raw)
+      return `${value}px`
+    },
     toggle () {
       !this.isAudioAnalyzing && audio.start()
       this.isAudioAnalyzing && audio.stop()
@@ -32,9 +36,10 @@ export default {
   mounted () {
     audio.init({
       onFrame: () => {
-        // this.RMS = audio.get('rms')
         for (let name in this.features) {
-          this.features[name] = audio.get(name)
+          let value = audio.get(name)
+          name === 'loudness' && (value = value.total)
+          this.features[name] = value
         }
       }
     }).then(() => {
@@ -49,13 +54,11 @@ html {
   background: #E1E1E1;
   font-family: Source Sans Pro, Helvetica, sans-serif;
 }
-
 #app {
   color: #2c3e50;
   max-width: 600px;
   text-align: center;
 }
-
 #app a {
   color: #42b983;
   text-decoration: none;
@@ -65,9 +68,13 @@ html {
   margin-right: auto;
   max-width: 600px;
 }
-
 #app > div {
   position: absolute;
   width: 100%;
+}
+.indicator {
+  display: inline-block;
+  height: 10px;
+  background: #0A0A0A;
 }
 </style>
