@@ -2,9 +2,12 @@
   <div class="root">
     <h1>a.io</h1>
     <button :disabled="!isAudioAvailable" @click="toggle">{{ isAudioAnalyzing ? 'stop' : 'start' }}</button>
+    <div>
+      <h3>RMS</h3>
+      <p>{{ RMS }}</p>
+    </div>
   </div>
 </template>
-
 <script>
 'use strict'
 
@@ -16,19 +19,23 @@ export default {
   data () {
     return {
       isAudioAvailable: false,
-      isAudioAnalyzing: false
+      isAudioAnalyzing: false,
+      RMS: 0
     }
   },
   methods: {
     toggle () {
-      !this.isAudioAnalyzing && audio.getAnalyzer().start()
-      this.isAudioAnalyzing && audio.getAnalyzer().stop()
+      !this.isAudioAnalyzing && audio.start()
+      this.isAudioAnalyzing && audio.stop()
       this.isAudioAnalyzing = !this.isAudioAnalyzing
     },
   },
   mounted () {
-    audio.init().then(() => {
-      console.info(audio.getAnalyzer())
+    audio.init({
+      onFrame: () => {
+        this.RMS = audio.get('rms')
+      }
+    }).then(() => {
       this.isAudioAvailable = true
     })
   }
