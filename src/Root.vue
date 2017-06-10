@@ -2,9 +2,8 @@
   <div class="root">
     <h1>a.io</h1>
     <button :disabled="!isAudioAvailable" @click="toggle">{{ isAudioAnalyzing ? 'stop' : 'start' }}</button>
-    <div>
-      <h3>RMS</h3>
-      <p>{{ RMS }}</p>
+    <div v-for="(value, name) in features">
+      <p>{{ name }}: {{ value }}</p>
     </div>
   </div>
 </template>
@@ -20,7 +19,7 @@ export default {
     return {
       isAudioAvailable: false,
       isAudioAnalyzing: false,
-      RMS: 0
+      features: Object.assign(...settings.audio.featureExtractors.map((feature) => ({ [feature]: 0 })))
     }
   },
   methods: {
@@ -28,12 +27,15 @@ export default {
       !this.isAudioAnalyzing && audio.start()
       this.isAudioAnalyzing && audio.stop()
       this.isAudioAnalyzing = !this.isAudioAnalyzing
-    },
+    }
   },
   mounted () {
     audio.init({
       onFrame: () => {
-        this.RMS = audio.get('rms')
+        // this.RMS = audio.get('rms')
+        for (let name in this.features) {
+          this.features[name] = audio.get(name)
+        }
       }
     }).then(() => {
       this.isAudioAvailable = true
