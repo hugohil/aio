@@ -1,9 +1,14 @@
 <template>
   <div class="root">
-    <h1>a.io</h1>
-    <button :disabled="!isAudioAvailable" @click="toggle">{{ isAudioAnalyzing ? 'stop' : 'start' }}</button>
-    <div v-for="(value, name) in features">
-      <p>{{ name }}: <span class="indicator" :style="{ width: getWidth(value) }"></span></p>
+    <header>
+      <h1>a.io</h1>
+      <button :disabled="!isAudioAvailable" @click="toggle">{{ isAudioAnalyzing ? 'stop' : 'start' }}</button>
+    </header>
+    <div v-for="(channel, index) in channels" class="channel">
+      <p><b>channel: {{ index }}</b></p>
+      <div v-for="(value, name) in channel">
+        <p>{{ name }}: <span class="indicator" :style="{ width: getWidth(value) }">{{ value ? value : 0 }}</span></p>
+      </div>
     </div>
   </div>
 </template>
@@ -19,7 +24,7 @@ export default {
     return {
       isAudioAvailable: false,
       isAudioAnalyzing: false,
-      features: Object.assign(...settings.audio.featureExtractors.map((feature) => ({ [feature]: 0 })))
+      channels: new Array(settings.audio.channels).fill(Object.assign(...settings.audio.featureExtractors.map((feature) => ({ [feature]: 0 }))))
     }
   },
   methods: {
@@ -28,23 +33,20 @@ export default {
       return `${value}px`
     },
     toggle () {
-      !this.isAudioAnalyzing && audio.start()
-      this.isAudioAnalyzing && audio.stop()
       this.isAudioAnalyzing = !this.isAudioAnalyzing
     }
   },
   mounted () {
-    audio.init({
-      onFrame: () => {
-        for (let name in this.features) {
-          let value = audio.get(name)
-          name === 'loudness' && (value = value.total)
-          this.features[name] = value
-        }
+    audio.init((data) => {
+      if (this.isAudioAnalyzing) {
+        this.channels = data
       }
     }).then(() => {
       this.isAudioAvailable = true
     })
+  },
+  destroyed () {
+    audio.destroy()
   }
 }
 </script>
@@ -72,9 +74,13 @@ html {
   position: absolute;
   width: 100%;
 }
-.indicator {
+/*.indicator {
   display: inline-block;
   height: 10px;
   background: #0A0A0A;
+}*/
+.channel {
+  display: inline-block;
+  width: 300px;
 }
 </style>

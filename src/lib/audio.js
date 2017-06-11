@@ -4,19 +4,15 @@ import Meyda from 'Meyda'
 
 const settings = require('electron').remote.getGlobal('settings')
 const getusermedia = require('getusermedia')
-const loop = require('raf-loop')
 const _ = require('lodash')
 
 const label = settings.audio.label
 
-const audioContext = new window.AudioContext()
-let source = null
-
-let meydaAnalyzer = null
-let engine = null
+const ctx = new window.AudioContext()
+let processor = null
 
 module.exports = {
-  init ({ onFrame }) {
+  init (callback) {
     return new Promise((resolve, reject) => {
       navigator.mediaDevices.enumerateDevices()
       .then(devices => devices.filter(device => {
@@ -41,18 +37,29 @@ module.exports = {
             console.warn(err)
             reject(err)
           } else {
-            source = audioContext.createMediaStreamSource(stream)
+            const channelsIn = settings.audio.channels
+            const channelsOut = 1
 
-            const featureExtractors = settings.audio.featureExtractors
-            meydaAnalyzer = Meyda.createMeydaAnalyzer({
-              featureExtractors,
-              audioContext: audioContext,
-              source: source,
-              bufferSize: settings.audio.bufferSize,
-              windowingFunction: 'hamming'
-            })
+            processor = ctx.createScriptProcessor(ctx.bufferSize, channelsIn, channelsOut)
 
-            engine = loop(onFrame)
+            const source = ctx.createMediaStreamSource(stream)
+            const splitter = ctx.createChannelSplitter(channelsIn)
+            const merger = ctx.createChannelMerger(channelsIn)
+
+            source.connect(splitter)
+            splitter.connect(processor)
+            processor.connect(merger)
+            merger.connect(ctx.destination)
+
+            console.log(processor)
+            processor.onaudioprocess = (event) => {
+              let extractedDatas = new Array(channelsIn)
+              for (var i = 0; i < channelsIn; i++) {
+                const audioDatas = event.inputBuffer.getChannelData(i)
+                extractedDatas[i] = Meyda.extract(settings.audio.featureExtractors, audioDatas)
+              }
+              typeof (callback) === 'function' && callback(extractedDatas)
+            }
 
             resolve()
           }
@@ -60,13 +67,5 @@ module.exports = {
       })
     })
   },
-  get: (feature) => meydaAnalyzer.get(feature),
-  start: () => {
-    meydaAnalyzer.start()
-    engine.start()
-  },
-  stop: () => {
-    meydaAnalyzer.stop()
-    engine.stop()
-  }
+  destroy () { processor.onaudioprocess = null }
 }

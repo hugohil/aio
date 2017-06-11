@@ -1,7 +1,8 @@
 {
   "audio": {
-    "featureExtractors": ["rms", "spectralCentroid", "spectralFlatness", "loudness"],
-    "label": "default",
-    "bufferSize": 512
+    "featureExtractors": ["rms", "spectralCentroid", "spectralFlatness"],
+    "label": "SoundflowerToBuiltin",
+    "bufferSize": 512,
+    "channels": 16
   }
 }
