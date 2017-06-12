@@ -7,9 +7,11 @@ const getusermedia = require('getusermedia')
 const _ = require('lodash')
 
 const label = settings.audio.label
+const channels = settings.audio.channels
 
 const ctx = new window.AudioContext()
-let processor = null
+let analyzers = []
+let processor
 
 module.exports = {
   init (callback) {
@@ -37,28 +39,25 @@ module.exports = {
             console.warn(err)
             reject(err)
           } else {
-            const channelsIn = settings.audio.channels
-            const channelsOut = 1
-
-            processor = ctx.createScriptProcessor(ctx.bufferSize, channelsIn, channelsOut)
-
             const source = ctx.createMediaStreamSource(stream)
-            const splitter = ctx.createChannelSplitter(channelsIn)
-            const merger = ctx.createChannelMerger(channelsIn)
 
+            const splitter = ctx.createChannelSplitter(channels)
             source.connect(splitter)
-            splitter.connect(processor)
-            processor.connect(merger)
-            merger.connect(ctx.destination)
 
-            console.log(processor)
-            processor.onaudioprocess = (event) => {
-              let extractedDatas = new Array(channelsIn)
-              for (var i = 0; i < channelsIn; i++) {
-                const audioDatas = event.inputBuffer.getChannelData(i)
-                extractedDatas[i] = Meyda.extract(settings.audio.featureExtractors, audioDatas)
-              }
-              typeof (callback) === 'function' && callback(extractedDatas)
+            const featureExtractors = settings.audio.featureExtractors
+            for (let i = 0; i < channels; i++) {
+              const meyda = Meyda.meyda()
+              analyzers.push(meyda.createMeydaAnalyzer({
+                audioContext: ctx,
+                source: splitter,
+                channelCount: channels,
+                channelIndex: i,
+                featureExtractors,
+                bufferSize: settings.audio.bufferSize,
+                callback: (datas, channel) => {
+                  typeof (callback) === 'function' && callback(datas, channel)
+                }
+              }))
             }
 
             resolve()
@@ -67,5 +66,7 @@ module.exports = {
       })
     })
   },
-  destroy () { processor.onaudioprocess = null }
+  start () { for (let i = 0; i < channels; i++) { analyzers[i].start() } },
+  stop () { for (let i = 0; i < channels; i++) { analyzers[i].stop() } },
+  destroy () { analyzers = [] }
 }

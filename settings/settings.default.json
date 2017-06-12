@@ -3,6 +3,6 @@
     "featureExtractors": ["rms", "spectralCentroid", "spectralFlatness"],
     "label": "SoundflowerToBuiltin",
     "bufferSize": 512,
-    "channels": 16
+    "channels": 8
   }
 }

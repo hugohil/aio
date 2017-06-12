@@ -5,7 +5,7 @@
       <button :disabled="!isAudioAvailable" @click="toggle">{{ isAudioAnalyzing ? 'stop' : 'start' }}</button>
     </header>
     <div v-for="(channel, index) in channels" class="channel">
-      <p><b>channel: {{ index }}</b></p>
+      <p><b>channel #{{ index + 1 }}</b></p>
       <div v-for="(value, name) in channel">
         <p>{{ name }}: <span class="indicator" :style="{ width: getWidth(value) }">{{ value ? value : 0 }}</span></p>
       </div>
@@ -33,13 +33,16 @@ export default {
       return `${value}px`
     },
     toggle () {
+      !this.isAudioAnalyzing && audio.start()
+      this.isAudioAnalyzing && audio.stop()
       this.isAudioAnalyzing = !this.isAudioAnalyzing
     }
   },
   mounted () {
-    audio.init((data) => {
+    audio.init((data, index) => {
       if (this.isAudioAnalyzing) {
-        this.channels = data
+        this.channels[index] = data
+        this.channels = this.channels.slice(0) // lol, this hack
       }
     }).then(() => {
       this.isAudioAvailable = true
