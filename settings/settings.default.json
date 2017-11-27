@@ -1,0 +1,43 @@
+{
+  "window" : {
+    "width": 1280,
+    "height": 720,
+    "kiosk": false,
+    "autoHideMenuBar": true,
+    "webPreferences": {
+      "plugins": true,
+      "directWrite": true,
+      "webSecurity": false,
+      "experimentalFeatures": false,
+      "experimentalCanvasFeatures": false,
+      "allowRunningInsecureContent": true,
+      "allowDisplayingInsecureContent": true
+    }
+  },
+  "appendSwitch": {
+    "--disable-pinch": "",
+    "--disable-touch-adjustment": "",
+    "--touch-events": ""
+  },
+  "service": {
+    "spacebro":{
+      "host": "spacebro.space",
+      "port": 3333,
+      "channelName": "aio-stream",
+      "client": {
+        "name": "aio",
+        "description": "aio spacebro client",
+        "in": {},
+        "out": {}
+      },
+      "connection": [
+        "aio/outMedia => aio/inMedia",
+        "aio/outMessage => aio/inMessage"
+      ]
+    }
+  },
+  "appendArgument": [
+    "--overscroll-history-navigation=0",
+    "--ignore-gpu-blacklist"
+  ]
+}
