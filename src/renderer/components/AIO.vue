@@ -2,7 +2,6 @@
   <div id="wrapper">
     <aio-sidebar></aio-sidebar>
     <aio-main></aio-main>
-    <aio-actions></aio-actions>
   </div>
 </template>
 
@@ -11,8 +10,7 @@
     name: 'aio',
     components: {
       'aio-main': require('@/components/Main').default,
-      'aio-sidebar': require('@/components/Sidebar').default,
-      'aio-actions': require('@/components/Actions').default
+      'aio-sidebar': require('@/components/Sidebar').default
     },
     methods: {}
   }
@@ -37,9 +35,5 @@
   .main {
     grid-column: 4 / end-line;
     grid-row: 1 / 12;
-  }
-  .actions {
-    grid-column: 1 / end-line;
-    grid-row: 12;
   }
 </style>
