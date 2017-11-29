@@ -1,6 +1,5 @@
 <template>
   <div id="wrapper">
-    <aio-toolbar></aio-toolbar>
     <aio-sidebar></aio-sidebar>
     <aio-main></aio-main>
     <aio-actions></aio-actions>
@@ -13,8 +12,7 @@
     components: {
       'aio-main': require('@/components/Main').default,
       'aio-sidebar': require('@/components/Sidebar').default,
-      'aio-actions': require('@/components/Actions').default,
-      'aio-toolbar': require('@/components/Toolbar').default
+      'aio-actions': require('@/components/Actions').default
     },
     methods: {}
   }
@@ -32,17 +30,13 @@
     border: 1px solid #000;
     box-sizing: border-box;
   }
-  .toolbar {
-    grid-column: 1 / end-line;
-    grid-row: 1;
-  }
   .sidebar {
     grid-column: 1 / 4;
-    grid-row: 2 / 12;
+    grid-row: 1 / 12;
   }
   .main {
     grid-column: 4 / end-line;
-    grid-row: 2 / 12;
+    grid-row: 1 / 12;
   }
   .actions {
     grid-column: 1 / end-line;

@@ -31,6 +31,7 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+  require('./menu')
 }
 
 global.settings = require('standard-settings').getSettings()

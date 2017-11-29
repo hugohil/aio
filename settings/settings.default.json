@@ -5,7 +5,7 @@
     "minHeight": 600,
     "minWidth": 800,
     "kiosk": false,
-    "autoHideMenuBar": true,
+    "autoHideMenuBar": false,
     "webPreferences": {
       "plugins": true,
       "directWrite": true,
