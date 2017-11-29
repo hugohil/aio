@@ -7,8 +7,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: require('@/components/Home').default
+      name: 'aio',
+      component: require('@/components/AIO').default
     },
     {
       path: '*',

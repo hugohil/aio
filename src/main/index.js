@@ -20,9 +20,7 @@ function createWindow () {
    * Initial window options
    */
   let options = {
-    height: 563,
-    useContentSize: true,
-    width: 1000
+    useContentSize: true
   }
 
   options = require('assignment')(options, global.settings.window)

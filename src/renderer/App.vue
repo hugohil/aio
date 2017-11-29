@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'aio'
+    name: 'app'
   }
 </script>
 
