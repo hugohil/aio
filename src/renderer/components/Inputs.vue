@@ -3,7 +3,7 @@
     <h2>inputs</h2>
     <div>
       <label for="realtime-select"><h3>Realtime track:</h3></label>
-      <select v-model="input.tracks.realtime" class="device__selector" id="realtime-select">
+      <select v-model="tracks.realtime" class="device__selector" id="realtime-select">
         <option disabled value="">Select device</option>
         <option value="device-1">Device #1</option>
         <option value="device-2">Device #2</option>
@@ -16,7 +16,7 @@
       <h3>File tracks:</h3>
       <button @click="removeFileInput">&minus;</button>
       <button @click="addFileInput">&plus;</button>
-      <div v-for="index in input.tracks.files.count">
+      <div v-for="index in tracks.files.count" :key="index">
         <label :for="`file-${index}`">track {{index}}:</label>
         <!-- TODO
           accept="audio/*"
@@ -28,6 +28,10 @@
           :id="`file-${index}`"
           :name="`file-${index}`"
         >
+        <!-- TODO
+          check file is selected
+         -->
+        <button @click="togglePlayback(index)">toggle playback</button>
       </div>
     </div>
   </div>
@@ -38,29 +42,31 @@
     name: 'inputs',
     data () {
       return {
-        input: {
-          tracks: {
-            realtime: null,
-            files: {
-              count: 0,
-              sources: []
-            }
+        tracks: {
+          realtime: null,
+          files: {
+            count: 0,
+            sources: []
           }
         }
       }
     },
     methods: {
       removeFileInput () {
-        if (this.input.tracks.files.count) {
-          this.input.tracks.files.count--
-          this.input.tracks.files.sources.splice(-1, 1)
+        if (this.tracks.files.count) {
+          this.tracks.files.count--
+          this.tracks.files.sources.splice(-1, 1)
         }
       },
       addFileInput () {
-        this.input.tracks.files.count++
+        this.tracks.files.count++
       },
       onFile ({ target }, index) {
-        this.input.tracks.files.sources[(index - 1)] = target.files[0]
+        this.tracks.files.sources[(index - 1)] = target.files[0]
+      },
+      togglePlayback (index) {
+        const file = this.tracks.files.sources[(index - 1)]
+        console.log(file.name)
       }
     }
   }

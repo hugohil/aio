@@ -34,18 +34,20 @@
   }
   #wrapper main {
     display: flex;
+    flex-wrap: wrap;
+    width: 100%;
     height: 100%;
   }
   #wrapper main > div {
     border-left: 1px solid #000;
+    border-top: 1px solid #000;
     box-sizing: border-box;
-    width: 25%;
-    height: 100%;
+    min-width: 50%;
+    min-height: 50%;
     margin: 0;
     padding: .3em;
-    display: inline-block;
   }
-  #wrapper main > div:first-child {
+  #wrapper main > div:nth-child(odd) {
     border-left: none;
   }
 </style>
