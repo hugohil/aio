@@ -28,6 +28,10 @@
     width: 100vw;
     height: 100vh;
   }
+  #wrapper > * {
+    border: 1px solid #000;
+    box-sizing: border-box;
+  }
   .toolbar {
     grid-column: 1 / end-line;
     grid-row: 1;
