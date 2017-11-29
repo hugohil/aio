@@ -1,6 +1,6 @@
 <template>
   <div class="output container">
-    <h2>outputs</h2>
+    <h2>output</h2>
     <div>
       <label for="output-log">log:</label>
       <input type="checkbox" v-model="log" id="output-log" name="output-log">
