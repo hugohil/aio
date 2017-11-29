@@ -9,6 +9,9 @@
           <option value="device-1">Device #1</option>
           <option value="device-2">Device #2</option>
         </select>
+        <!-- TODO
+          device type = mono | stereo | multi-channel
+         -->
       </div>
       <div>
         <h3>File tracks:</h3>
@@ -16,7 +19,9 @@
         <button @click="removeFileInput">Remove file track</button>
         <div v-for="index in input.tracks.files.count">
           <label :for="`file-${index}`">track {{index}}:</label>
-          <!-- accept="audio/*" -->
+          <!-- TODO
+            accept="audio/*"
+          -->
           <input
             class="file__selector"
             type="file"
