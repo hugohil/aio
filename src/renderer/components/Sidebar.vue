@@ -25,6 +25,13 @@
       </div>
       <div class="inputs__type inputs__type--device" v-show="input.type === 'device'">
         <h3>device</h3>
+        <div class="device-input__container">
+          <select v-model="input.device.device" class="device__selector">
+            <option disabled value="">Select device</option>
+            <option value="device-1">Device #1</option>
+            <option value="device-2">Device #2</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="sidebar__child sidebar__child--outputs">
@@ -46,6 +53,9 @@
           file: {
             count: 1,
             files: []
+          },
+          device: {
+            device: ''
           }
         }
       }
