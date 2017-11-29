@@ -1,14 +1,18 @@
 <template>
-  <div class="params__container">
-    <h2>params</h2>
+  <div class="tools__container">
+    <h2>tools</h2>
     <div>
-      <label for="params-threshold">threshold:</label>
-      <input type="range" min="0" max="1" step="0.001" v-model="threshold" id="params-threshold">
+      <label for="tools-computing">computing:</label>
+      <input type="checkbox" v-model="computing" @change="onComputeUpdate" id="tools-computing">
+    </div>
+    <div>
+      <label for="tools-threshold">threshold:</label>
+      <input type="range" min="0" max="1" step="0.001" v-model="threshold" id="tools-threshold">
       <input type="number" v-model="threshold" min="0" max="1" step="0.001">
     </div>
     <div>
-      <label for="params-debounce">debounce:</label>
-      <input type="range" min="0" max="1000" step="1" v-model="debounce" id="params-debounce">
+      <label for="tools-debounce">debounce:</label>
+      <input type="range" min="0" max="1000" step="1" v-model="debounce" id="tools-debounce">
       <input type="number" v-model="debounce" min="0" max="1000">
     </div>
     <div>
@@ -29,9 +33,10 @@
 
 <script>
   export default {
-    name: 'params',
+    name: 'tools',
     data () {
       return {
+        computing: false,
         threshold: 0.001,
         debounce: 100,
         features: {
@@ -41,6 +46,9 @@
       }
     },
     methods: {
+      onComputeUpdate () {
+        // console.log(this.computing)
+      },
       removeAudioFeature () {
         if (this.features.count > 1) {
           this.features.count--

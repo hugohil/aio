@@ -3,7 +3,7 @@
     <header>a.io</header>
     <main>
       <aio-inputs></aio-inputs>
-      <aio-params></aio-params>
+      <aio-tools></aio-tools>
       <aio-visualizer></aio-visualizer>
       <aio-output></aio-output>
     </main>
@@ -15,7 +15,7 @@
     name: 'aio',
     components: {
       'aio-inputs': require('@/components/Inputs').default,
-      'aio-params': require('@/components/Params').default,
+      'aio-tools': require('@/components/Tools').default,
       'aio-visualizer': require('@/components/Visualizer').default,
       'aio-output': require('@/components/Output').default
     },
@@ -43,7 +43,7 @@
     border-top: 1px solid #000;
     box-sizing: border-box;
     min-width: 50%;
-    min-height: 50%;
+    height: 50%;
     margin: 0;
     padding: .3em;
   }
