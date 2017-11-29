@@ -2,16 +2,19 @@
   <aside class="sidebar container">
     <div class="sidebar__child sidebar__child--inputs">
       <h2>inputs</h2>
-      <select v-model="input.type">
-        <option disabled value="">Select input type</option>
-        <option>file</option>
-        <option>device</option>
-      </select>
-      <div class="inputs__type inputs__type--file" v-show="input.type === 'file'">
-        <h3>file</h3>
-        <button class="file__button--remove" @click="removeFileInput">&minus;</button>
-        <button class="file__button--add" @click="addFileInput">&plus;</button>
-        <div class="file-input__container" v-for="index in input.file.count">
+      <div>
+        <label for="realtime-select"><h3>Realtime track:</h3></label>
+        <select v-model="input.tracks.realtime" class="device__selector" id="realtime-select">
+          <option disabled value="">Select device</option>
+          <option value="device-1">Device #1</option>
+          <option value="device-2">Device #2</option>
+        </select>
+      </div>
+      <div>
+        <h3>File tracks:</h3>
+        <button @click="addFileInput">Add file track</button>
+        <button @click="removeFileInput">Remove file track</button>
+        <div v-for="index in input.tracks.files.count">
           <label :for="`file-${index}`">track {{index}}:</label>
           <!-- accept="audio/*" -->
           <input
@@ -21,16 +24,6 @@
             :id="`file-${index}`"
             :name="`file-${index}`"
           >
-        </div>
-      </div>
-      <div class="inputs__type inputs__type--device" v-show="input.type === 'device'">
-        <h3>device</h3>
-        <div class="device-input__container">
-          <select v-model="input.device.device" class="device__selector">
-            <option disabled value="">Select device</option>
-            <option value="device-1">Device #1</option>
-            <option value="device-2">Device #2</option>
-          </select>
         </div>
       </div>
     </div>
@@ -49,29 +42,28 @@
     data () {
       return {
         input: {
-          type: '',
-          file: {
-            count: 1,
-            files: []
-          },
-          device: {
-            device: ''
+          tracks: {
+            realtime: null,
+            files: {
+              count: 0,
+              sources: []
+            }
           }
         }
       }
     },
     methods: {
       removeFileInput () {
-        if (this.input.file.count > 1) {
-          this.input.file.count--
-          this.input.file.files.splice(-1, 1)
+        if (this.input.tracks.files.count) {
+          this.input.tracks.files.count--
+          this.input.tracks.files.sources.splice(-1, 1)
         }
       },
       addFileInput () {
-        this.input.file.count++
+        this.input.tracks.files.count++
       },
       onFile ({ target }, index) {
-        this.input.file.files[(index - 1)] = target.files[0]
+        this.input.tracks.files.sources[(index - 1)] = target.files[0]
       }
     }
   }
