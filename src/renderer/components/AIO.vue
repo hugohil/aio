@@ -1,7 +1,12 @@
 <template>
   <div id="wrapper">
-    <aio-sidebar></aio-sidebar>
-    <aio-main></aio-main>
+    <header>a.io</header>
+    <main>
+      <aio-inputs></aio-inputs>
+      <aio-params></aio-params>
+      <aio-visualizer></aio-visualizer>
+      <aio-output></aio-output>
+    </main>
   </div>
 </template>
 
@@ -9,8 +14,10 @@
   export default {
     name: 'aio',
     components: {
-      'aio-main': require('@/components/Main').default,
-      'aio-sidebar': require('@/components/Sidebar').default
+      'aio-inputs': require('@/components/Inputs').default,
+      'aio-params': require('@/components/Params').default,
+      'aio-visualizer': require('@/components/Visualizer').default,
+      'aio-output': require('@/components/Output').default
     },
     methods: {}
   }
@@ -18,22 +25,27 @@
 
 <style>
   #wrapper {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: repeat(12, 1fr);
     width: 100vw;
     height: 100vh;
   }
-  #wrapper > * {
-    border: 1px solid #000;
+  header {
+    border-bottom: 1px solid #000;
+    padding: .3em;
+  }
+  #wrapper main {
+    display: flex;
+    height: 100%;
+  }
+  #wrapper main > div {
+    border-left: 1px solid #000;
     box-sizing: border-box;
+    width: 25%;
+    height: 100%;
+    margin: 0;
+    padding: .3em;
+    display: inline-block;
   }
-  .sidebar {
-    grid-column: 1 / 4;
-    grid-row: 1 / 12;
-  }
-  .main {
-    grid-column: 4 / end-line;
-    grid-row: 1 / 12;
+  #wrapper main > div:first-child {
+    border-left: none;
   }
 </style>
