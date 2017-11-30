@@ -24,6 +24,10 @@
   },
   "dependencies": {
     "assignment": "^2.2.1",
+    "dat.gui": "^0.6.1",
+    "getusermedia": "^2.0.1",
+    "lodash": "^4.17.4",
+    "meyda": "^4.0.5",
     "standard-settings": "^1.1.8",
     "vue": "^2.5.8",
     "vue-electron": "^1.0.6",

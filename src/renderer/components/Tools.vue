@@ -2,18 +2,23 @@
   <div class="tools__container">
     <h2>tools</h2>
     <div>
-      <label for="tools-computing">computing:</label>
-      <input type="checkbox" v-model="computing" @change="onComputeUpdate" id="tools-computing">
+      <h3>Computing:</h3>
+      <button
+        @click="toggleComputing"
+      ><i class="material-icons icon--button">{{computing ? 'stop' : 'swap_horiz' }}</i></button>
     </div>
     <div>
-      <label for="tools-threshold">threshold:</label>
-      <input type="range" min="0" max="1" step="0.001" v-model="threshold" id="tools-threshold">
-      <input type="number" v-model="threshold" min="0" max="1" step="0.001">
+      <h3>Settings:</h3>
+      <div>
+        <label for="tools-threshold">threshold:</label>
+        <input type="range" min="0" max="1" step="0.001" v-model="threshold" id="tools-threshold">
+        <input type="number" v-model="threshold" min="0" max="1" step="0.001">
+      </div>
+      <div>
+        <label for="tools-debounce">debounce:</label>
+        <input type="range" min="0" max="1000" step="1" v-model="debounce" id="tools-debounce">
+        <input type="number" v-model="debounce" min="0" max="1000">
     </div>
-    <div>
-      <label for="tools-debounce">debounce:</label>
-      <input type="range" min="0" max="1000" step="1" v-model="debounce" id="tools-debounce">
-      <input type="number" v-model="debounce" min="0" max="1000">
     </div>
     <div>
       <h3>Audio features:</h3>
@@ -36,7 +41,6 @@
     name: 'tools',
     data () {
       return {
-        computing: false,
         threshold: 0.001,
         debounce: 100,
         features: {
@@ -45,9 +49,14 @@
         }
       }
     },
+    computed: {
+      computing () {
+        return this.$store.state.audio.computing
+      }
+    },
     methods: {
-      onComputeUpdate () {
-        // console.log(this.computing)
+      toggleComputing () {
+        this.$store.dispatch(this.computing ? 'STOP_ANALYZERS' : 'START_ANALYZERS')
       },
       removeAudioFeature () {
         if (this.features.count > 1) {

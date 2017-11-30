@@ -10,7 +10,7 @@
       "plugins": true,
       "directWrite": true,
       "webSecurity": false,
-      "experimentalFeatures": false,
+      "experimentalFeatures": true,
       "experimentalCanvasFeatures": false,
       "allowRunningInsecureContent": true,
       "allowDisplayingInsecureContent": true

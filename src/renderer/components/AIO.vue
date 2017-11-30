@@ -55,4 +55,8 @@
   #wrapper main > div:nth-child(odd) {
     border-left: none;
   }
+  .icon--button {
+    font-size: 1.25em;
+    vertical-align: text-bottom;
+  }
 </style>

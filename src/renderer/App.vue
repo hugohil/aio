@@ -13,5 +13,6 @@
 <style>
   @import './style/css/reset';
   @import './style/css/kiosk';
+  @import './style/css/material-icons';
   /* CSS */
 </style>

@@ -14,24 +14,41 @@
     </div>
     <div>
       <h3>File tracks:</h3>
-      <button @click="removeFileInput">&minus;</button>
-      <button @click="addFileInput">&plus;</button>
+      <div class="file__controls">
+        <button
+          @click="playAllFiles"
+          :disabled="playing || !tracks.files.sources.length"
+        ><i class="material-icons icon--button">play_arrow</i></button>
+        <button
+          @click="pauseAllFiles($event, false)"
+          :disabled="!playing"
+        ><i class="material-icons icon--button">pause</i></button>
+        <button
+          @click="pauseAllFiles($event, true)"
+          :disabled="!playing"
+        ><i class="material-icons icon--button">stop</i></button>
+      </div>
       <div v-for="index in tracks.files.count" :key="index">
+        <button @click="removeFileInput((index - 1))">&minus;</button>
         <label :for="`file-${index}`">track {{index}}:</label>
-        <!-- TODO
-          accept="audio/*"
-        -->
         <input
           class="file__selector"
+          accept="audio/*"
           type="file"
-          @change="onFile($event, index)"
+          @change="onFile($event, (index - 1))"
           :id="`file-${index}`"
           :name="`file-${index}`"
         >
-        <!-- TODO
-          check file is selected
-         -->
-        <button @click="togglePlayback(index)">toggle playback</button>
+        <audio
+          class="file__player"
+          :src="getFilePath((index - 1))"
+          ref="fileplayer"
+          preload
+          controls
+        ></audio>
+      </div>
+      <div class="file__manage">
+        <button @click="addFileInput">&plus;</button>
       </div>
     </div>
   </div>
@@ -42,6 +59,7 @@
     name: 'inputs',
     data () {
       return {
+        playing: false,
         tracks: {
           realtime: null,
           files: {
@@ -52,24 +70,55 @@
       }
     },
     methods: {
-      removeFileInput () {
-        if (this.tracks.files.count) {
-          this.tracks.files.count--
-          this.tracks.files.sources.splice(-1, 1)
+      removeFileInput (index) {
+        this.tracks.files.count--
+        if (this.tracks.files.sources[index]) {
+          this.tracks.files.sources.splice(index, 1)
+          this.$store.dispatch('REMOVE_FILE', index)
         }
       },
       addFileInput () {
         this.tracks.files.count++
       },
       onFile ({ target }, index) {
-        this.tracks.files.sources[(index - 1)] = target.files[0]
+        const file = target.files[0] || null
+        this.tracks.files.sources[index] = file
+        this.$store.dispatch('ADD_FILE', {
+          player: this.$refs.fileplayer[index],
+          index,
+          file
+        })
+        if (file) {
+        } else {
+        }
+        this.$nextTick(this.$forceUpdate)
       },
-      togglePlayback (index) {
-        const file = this.tracks.files.sources[(index - 1)]
-        console.log(file.name)
+      getFilePath (index) {
+        const track = this.tracks.files.sources[index]
+        return track ? `file://${track.path}` : ''
+      },
+      playAllFiles () {
+        this.playing = true
+        this.$refs.fileplayer && this.$refs.fileplayer.forEach((player) => {
+          player.currentSrc && player.play()
+        })
+      },
+      pauseAllFiles (event, stop = false) {
+        this.playing = false
+        this.$refs.fileplayer && this.$refs.fileplayer.forEach((player) => {
+          player.currentSrc && player.pause()
+          stop && (player.currentTime = 0)
+        })
       }
     }
   }
 </script>
 
-<style></style>
+<style>
+  .file__player {
+    display: block;
+  }
+  .file__controls {
+    margin: 1em 0;
+  }
+</style>
