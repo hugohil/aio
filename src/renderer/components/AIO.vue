@@ -27,6 +27,7 @@
   #wrapper {
     width: 100vw;
     height: 100vh;
+    background: #FFF;
   }
   header {
     border-bottom: 1px solid #000;
