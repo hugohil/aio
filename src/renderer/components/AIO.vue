@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <header>a.io</header>
+    <header><h1>a.io</h1></header>
     <main>
       <aio-inputs></aio-inputs>
       <aio-tools></aio-tools>
@@ -28,6 +28,10 @@
     width: 100vw;
     height: 100vh;
     background: #FFF;
+    font-family: monospace;
+  }
+  h1 {
+    font-weight: 700;
   }
   header {
     border-bottom: 1px solid #000;
