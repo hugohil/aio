@@ -6,6 +6,10 @@
       <input type="checkbox" v-model="log" id="output-log" name="output-log">
     </div>
     <div>
+      <label for="output-stream">stream:</label>
+      <input type="checkbox" v-model="stream" id="output-stream" name="output-stream">
+    </div>
+    <div>
       <h3>Spacebro:</h3>
       <label for="output-spacebro-address">address:</label>
       <input type="text" v-model="spacebro.address" id="output-spacebro-address" name="output-spacebro-address">
@@ -38,20 +42,42 @@
   export default {
     name: 'output',
     data () {
-      return {
-        log: true,
-        spacebro: {
-          address: '',
-          port: ''
+      return {}
+    },
+    computed: {
+      log: {
+        get: function () {
+          return this.$store.state.output.log
         },
-        file: {
-          name: '',
-          location: '',
-          format: ''
+        set: function (value) {
+          this.$store.commit('UPDATE_LOG', value)
+        }
+      },
+      stream: {
+        get: function () {
+          return this.$store.state.output.stream
+        },
+        set: function (value) {
+          this.$store.commit('UPDATE_STREAM', value)
+        }
+      },
+      spacebro: {
+        get: function () {
+          return this.$store.state.output.spacebro
+        },
+        set: function (value) {
+          this.$store.commit('UPDATE_SPACEBRO', value)
+        }
+      },
+      file: {
+        get: function () {
+          return this.$store.state.output.file
+        },
+        set: function (value) {
+          this.$store.commit('UPDATE_FILE', value)
         }
       }
-    },
-    methods: {}
+    }
   }
 </script>
 
