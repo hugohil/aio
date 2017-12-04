@@ -4,6 +4,7 @@ import * as audio from '@/lib/audio'
 
 const state = {
   computing: false,
+  threshold: 0.05,
   tracks: {
     realtime: null,
     files: []
@@ -24,6 +25,9 @@ const mutations = {
   },
   STOP_ANALYZERS (state) {
     state.computing = false
+  },
+  UPDATE_THRESHOLD (state, threshold) {
+    state.threshold = threshold
   },
   RESET_INPUT (state) {
     state = initial

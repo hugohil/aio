@@ -28,8 +28,10 @@ export function addAnalyzer ({ player, index }) {
       bufferSize: settings.audio.bufferSize,
       featureExtractors: settings.audio.featureExtractors,
       callback: (datas) => {
-        console.log(index, datas)
-        store.state.output.file && file.write(JSON.stringify(datas))
+        if (datas.rms > store.state.audio.threshold) {
+          console.log(index, datas)
+          store.state.output.file && file.write(JSON.stringify(datas))
+        }
       }
     })
   }

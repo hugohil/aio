@@ -11,14 +11,9 @@
       <h3>Settings:</h3>
       <div>
         <label for="tools-threshold">threshold:</label>
-        <input type="range" min="0" max="1" step="0.001" v-model="threshold" id="tools-threshold">
-        <input type="number" v-model="threshold" min="0" max="1" step="0.001">
+        <input type="range" min="0" max="1" step="0.001" :value="threshold" @input="updateThreshold" id="tools-threshold">
+        <input type="number" :value="threshold" @input="updateThreshold" min="0" max="1" step="0.001">
       </div>
-      <div>
-        <label for="tools-debounce">debounce:</label>
-        <input type="range" min="0" max="1000" step="1" v-model="debounce" id="tools-debounce">
-        <input type="number" v-model="debounce" min="0" max="1000">
-    </div>
     </div>
     <div>
       <h3>Audio features:</h3>
@@ -41,8 +36,6 @@
     name: 'tools',
     data () {
       return {
-        threshold: 0.001,
-        debounce: 100,
         features: {
           count: 1,
           ids: ['rms']
@@ -52,9 +45,15 @@
     computed: {
       computing () {
         return this.$store.state.audio.computing
+      },
+      threshold: function () {
+        return this.$store.state.audio.threshold
       }
     },
     methods: {
+      updateThreshold ({ target }) {
+        this.$store.commit('UPDATE_THRESHOLD', target.value)
+      },
       toggleComputing () {
         this.$store.dispatch(this.computing ? 'STOP_ANALYZERS' : 'START_ANALYZERS')
       },
