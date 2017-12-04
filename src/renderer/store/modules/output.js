@@ -4,15 +4,14 @@
 
 const state = {
   log: true,
-  stream: true,
+  file: false,
   spacebro: {
     address: '',
     port: ''
   },
-  file: {
+  filepath: {
     name: '',
-    location: '',
-    format: ''
+    folder: ''
   }
 }
 
@@ -22,14 +21,20 @@ const mutations = {
   UPDATE_LOG (state, log) {
     state.log = log
   },
-  UPDATE_STREAM (state, stream) {
-    state.stream = stream
-  },
-  UPDATE_SPACEBRO (state, spacebro) {
-    state.spacebro = spacebro
-  },
   UPDATE_FILE (state, file) {
     state.file = file
+  },
+  UPDATE_SPACEBRO_ADDRESS (state, address) {
+    state.spacebro.address = address
+  },
+  UPDATE_SPACEBRO_PORT (state, port) {
+    state.spacebro.port = port
+  },
+  UPDATE_FILEPATH_NAME (state, name) {
+    state.filepath.name = name
+  },
+  UPDATE_FILEPATH_FOLDER (state, folder) {
+    state.filepath.folder = folder
   },
   RESET_OUTPUT (state) {
     state = initial

@@ -1,7 +1,8 @@
 'use strict'
 
 import fs from 'fs'
-
+import path from 'path'
+import store from '@/store'
 import Meyda from 'meyda'
 
 const settings = {
@@ -28,7 +29,7 @@ export function addAnalyzer ({ player, index }) {
       featureExtractors: settings.audio.featureExtractors,
       callback: (datas) => {
         console.log(index, datas)
-        file.write(JSON.stringify(datas))
+        store.state.output.file && file.write(JSON.stringify(datas))
       }
     })
   }
@@ -39,14 +40,25 @@ export function removeAnalyzer (index) {
 }
 
 export function start () {
-  const filename = `./aio-output-${Date.now()}.json`
-  file = fs.createWriteStream(filename)
-  file.write('[')
+  if (store.state.output.file) {
+    const storeFilename = store.state.output.filepath.name
+    const storeFilefolder = store.state.output.filepath.folder
+
+    const filename = storeFilename ? `${storeFilename}.json` : `aio-output-${Date.now()}.json`
+    const folder = storeFilefolder || './'
+    const filepath = path.resolve(folder, filename)
+    console.log(filepath)
+
+    file = fs.createWriteStream(filepath)
+    file.write('[')
+  }
   analyzers.forEach((analyzer) => analyzer.start())
 }
 
 export function stop () {
   analyzers.forEach((analyzer) => analyzer.stop())
-  file.write(']')
-  file.end()
+  if (store.state.output.file) {
+    file.write(']')
+    file.end()
+  }
 }

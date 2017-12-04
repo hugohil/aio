@@ -6,34 +6,31 @@
       <input type="checkbox" v-model="log" id="output-log" name="output-log">
     </div>
     <div>
-      <label for="output-stream">stream:</label>
-      <input type="checkbox" v-model="stream" id="output-stream" name="output-stream">
+      <label for="output-file">file:</label>
+      <input type="checkbox" v-model="file" id="output-file" name="output-file">
     </div>
     <div>
       <h3>Spacebro:</h3>
       <label for="output-spacebro-address">address:</label>
-      <input type="text" v-model="spacebro.address" id="output-spacebro-address" name="output-spacebro-address">
+      <input type="text" :value="spacebro.address" @input="updateAddress" id="output-spacebro-address" name="output-spacebro-address">
       <br><label for="output-spacebro-port">port:</label>
-      <input type="number" v-model="spacebro.port" min="1000" max="9999" id="output-spacebro-port" name="output-spacebro-port">
+      <input type="number" :value="spacebro.port" @input="updatePort" min="1000" max="9999" id="output-spacebro-port" name="output-spacebro-port">
     </div>
     <div>
       <h3>File:</h3>
-      <label for="output-file-name">name:</label>
-      <!-- TODO
-        default generic name
-       -->
-      <input type="text" v-model="file.name" id="output-file-name" name="output-file-name">
-      <br><label for="output-file-location">location:</label>
+      <label for="output-filepath-name">name:</label>
+      <input type="text" :value="filepath.name" @input="updateName" id="output-filepath-name" name="output-filepath-name">
+      <br><label for="output-filepath-folder">folder:</label>
       <!-- TODO
         file path selector
        -->
-      <input type="text" v-model="file.location" id="output-file-location" name="output-file-location">
-      <br><label for="output-file-format">format:</label>
-      <select v-model="file.format" id="output-file-format">
+      <input type="file" webkitdirectory @change="updateFolder" id="output-filepath-folder" name="output-filepath-folder">
+<!--       <br><label for="output-filepath-format">format:</label>
+      <select v-model="file.format" id="output-filepath-format">
         <option disabled value="">Select format</option>
         <option>json</option>
         <option>csv</option>
-      </select>
+      </select> -->
     </div>
   </div>
 </template>
@@ -53,22 +50,6 @@
           this.$store.commit('UPDATE_LOG', value)
         }
       },
-      stream: {
-        get: function () {
-          return this.$store.state.output.stream
-        },
-        set: function (value) {
-          this.$store.commit('UPDATE_STREAM', value)
-        }
-      },
-      spacebro: {
-        get: function () {
-          return this.$store.state.output.spacebro
-        },
-        set: function (value) {
-          this.$store.commit('UPDATE_SPACEBRO', value)
-        }
-      },
       file: {
         get: function () {
           return this.$store.state.output.file
@@ -76,6 +57,26 @@
         set: function (value) {
           this.$store.commit('UPDATE_FILE', value)
         }
+      },
+      spacebro: function () {
+        return this.$store.state.output.spacebro
+      },
+      filepath: function () {
+        return this.$store.state.output.filepath
+      }
+    },
+    methods: {
+      updateAddress ({ target }) {
+        this.$store.commit('UPDATE_SPACEBRO_ADDRESS', target.value)
+      },
+      updatePort ({ target }) {
+        this.$store.commit('UPDATE_SPACEBRO_PORT', target.value)
+      },
+      updateName ({ target }) {
+        this.$store.commit('UPDATE_FILEPATH_NAME', target.value)
+      },
+      updateFolder ({ target }) {
+        this.$store.commit('UPDATE_FILEPATH_FOLDER', target.files[0].path)
       }
     }
   }
