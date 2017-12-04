@@ -1,41 +1,25 @@
 # aio
 
-> realtime audio analysis tool
+> Realtime audio analysis tool
 
-[![js-standard-style](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com/)
-
-## Build Setup
+#### Build Setup
 
 ``` bash
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
-# -t (or --target=) option is optionnal and override the default webpack target (https://webpack.github.io/docs/configuration.html#target)
-npm start [-- -t {target}] # or `npm run dev`
+# serve with hot reload at localhost:9080
+npm run dev
 
-# launch electron and open a window at localhost:8080
-# you must have run the `npm run dev` command in an other terminal window
-# -s option is optionnal is used to add settings over the default settings
-npm run electron [-- -s {settings}]
-
-# build for production with minifications and package the app.
+# build electron application for production
 npm run build
-npm run build:darwin
-npm run build:linux
-npm run build:win32
-npm run build:all # All platforms, all architectures
-npm run build:no-package # Standalone build
-# Note: use the -t (or --target=) option to override the default webpack target (https://webpack.github.io/docs/configuration.html#target). For example `npm run build -- -t web`.
 
-# package a portable binary for a specific platform from the available build.
-npm run package # package for you current platform
-npm run package:darwin
-npm run package:linux
-npm run package:win32
-npm run package:all # All platforms, all architectures
+
+# lint all JS/Vue component files in `src/`
+npm run lint
+
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://soixantecircuits.github.io/nd/).
+---
 
-:wq
+This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
