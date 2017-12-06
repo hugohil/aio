@@ -2,6 +2,8 @@
 
 > Realtime audio analysis tool
 
+aio is built uppon [meyda](https://github.com/meyda/meyda) and is basically a GUI for this library.
+
 #### Build Setup
 
 ``` bash
