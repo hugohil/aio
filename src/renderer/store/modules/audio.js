@@ -5,6 +5,7 @@ import * as audio from '@/lib/audio'
 const state = {
   computing: false,
   threshold: 0.05,
+  devices: [],
   tracks: {
     realtime: null,
     files: []
@@ -14,6 +15,12 @@ const state = {
 const initial = Object.assign({}, state)
 
 const mutations = {
+  INIT_DEVICES (state, devices) {
+    state.devices = devices
+  },
+  SELECT_DEVICE (state, device) {
+    state.tracks.realtime = device
+  },
   ADD_FILE (state, { file, index }) {
     state.tracks.files[index] = file
   },
@@ -35,6 +42,10 @@ const mutations = {
 }
 
 const actions = {
+  SELECT_DEVICE ({ commit, state }, device) {
+    commit('SELECT_DEVICE', device)
+    audio.setRealtimeAnalyzer(device)
+  },
   ADD_FILE ({ commit, state }, { file, player, index }) {
     player.addEventListener('play', () => {
       audio.addAnalyzer({ player, index })

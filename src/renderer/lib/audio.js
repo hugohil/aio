@@ -5,6 +5,8 @@ import path from 'path'
 import store from '@/store'
 import Meyda from 'meyda'
 
+import getusermedia from 'getusermedia'
+
 const settings = {
   audio: {
     featureExtractors: ['rms'],
@@ -18,9 +20,38 @@ const ctx = new window.AudioContext()
 let analyzers = []
 let file = null
 
-export function addAnalyzer ({ player, index }) {
+export function getDeviceSources () {
+  return navigator.mediaDevices.enumerateDevices()
+    .then(devices => devices.filter(device => {
+      return /audioinput/i.test(device.kind)
+    }))
+}
+
+export function setRealtimeAnalyzer (device) {
+  getusermedia({
+    video: false,
+    audio: {
+      deviceId: {
+        exact: device.deviceId
+      }
+    }
+  }, (err, stream) => {
+    if (err) {
+      console.warn(err)
+    } else {
+      addAnalyzer({ stream, index: -1 })
+    }
+  })
+}
+
+export function addAnalyzer ({ stream, player, index }) {
+  index++ // (poorly) make sure realtime device is index 0 and tracks are 1+
   if (!analyzers[index]) {
-    const stream = player.captureStream()
+    if (!stream && !player) {
+      console.error('no stream or player provided.')
+    } else if (!stream && player) {
+      stream = player.captureStream()
+    }
     const source = ctx.createMediaStreamSource(stream)
     analyzers[index] = Meyda.createMeydaAnalyzer({
       source,
@@ -54,11 +85,11 @@ export function start () {
     file = fs.createWriteStream(filepath)
     file.write('[')
   }
-  analyzers.forEach((analyzer) => analyzer.start())
+  analyzers.forEach((analyzer) => analyzer && analyzer.start())
 }
 
 export function stop () {
-  analyzers.forEach((analyzer) => analyzer.stop())
+  analyzers.forEach((analyzer) => analyzer && analyzer.stop())
   if (store.state.output.file) {
     file.write(']')
     file.end()

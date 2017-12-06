@@ -3,10 +3,16 @@
     <h2>inputs</h2>
     <div>
       <label for="realtime-select"><h3>Realtime track:</h3></label>
-      <select v-model="tracks.realtime" class="device__selector" id="realtime-select">
+      <select v-model="selectedDevice"
+        :disabled="computing"
+        class="device__selector"
+        id="realtime-select"
+      >
         <option disabled value="">Select device</option>
-        <option value="device-1">Device #1</option>
-        <option value="device-2">Device #2</option>
+        <option v-for="device in devices"
+          :key="device.deviceId"
+          :value="device"
+        >{{ device.label }}</option>
       </select>
       <!-- TODO
         device type = mono | stereo | multi-channel
@@ -29,12 +35,13 @@
         ><i class="material-icons icon--button">stop</i></button>
       </div>
       <div v-for="index in tracks.files.count" :key="index">
-        <button @click="removeFileInput((index - 1))">&minus;</button>
+        <button :disabled="computing" @click="removeFileInput((index - 1))">&minus;</button>
         <label :for="`file-${index}`">track {{index}}:</label>
         <input
           class="file__selector"
           accept="audio/*"
           type="file"
+          :disabled="computing"
           @change="onFile($event, (index - 1))"
           :id="`file-${index}`"
           :name="`file-${index}`"
@@ -48,13 +55,15 @@
         ></audio>
       </div>
       <div class="file__manage">
-        <button @click="addFileInput">&plus;</button>
+        <button :disabled="computing" @click="addFileInput">&plus;</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { getDeviceSources } from '@/lib/audio'
+
   export default {
     name: 'inputs',
     data () {
@@ -68,6 +77,25 @@
           }
         }
       }
+    },
+    computed: {
+      selectedDevice: {
+        get: function () {
+          return this.$store.state.audio.device
+        },
+        set: function (value) {
+          this.$store.dispatch('SELECT_DEVICE', value)
+        }
+      },
+      devices: function () {
+        return this.$store.state.audio.devices
+      },
+      computing: function () {
+        return this.$store.state.audio.computing
+      }
+    },
+    created () {
+      getDeviceSources().then(devices => { this.$store.commit('INIT_DEVICES', devices) })
     },
     methods: {
       removeFileInput (index) {
