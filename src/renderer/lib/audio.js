@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import store from '@/store'
 import Meyda from 'meyda'
+import * as spacebro from '@/lib/spacebro'
 
 import getusermedia from 'getusermedia'
 
@@ -62,6 +63,7 @@ export function addAnalyzer ({ stream, player, index }) {
         if (datas.rms > store.state.audio.threshold) {
           console.log(index, datas)
           store.state.output.file && file.write(JSON.stringify(datas))
+          store.state.output.spacebro && spacebro.send(datas)
         }
       }
     })

@@ -23,8 +23,8 @@
   },
   "service": {
     "spacebro":{
-      "host": "spacebro.space",
-      "port": 3333,
+      "host": "127.0.0.1",
+      "port": 8888,
       "channelName": "aio-stream",
       "client": {
         "name": "aio",

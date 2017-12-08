@@ -28,11 +28,11 @@
     "getusermedia": "^2.0.1",
     "lodash": "^4.17.4",
     "meyda": "^4.0.5",
+    "spacebro-client": "^0.4.2",
     "standard-settings": "^1.1.8",
     "vue": "^2.5.8",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
-    "vue-spacebro-client": "^1.0.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
