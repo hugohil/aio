@@ -1,17 +1,12 @@
 'use strict'
 
-import fs from 'fs'
-import path from 'path'
 import store from '@/store'
 import Meyda from 'meyda'
-import * as spacebro from '@/lib/spacebro'
 
 import getusermedia from 'getusermedia'
 
 const settings = {
   audio: {
-    featureExtractors: ['rms'],
-    label: 'default',
     bufferSize: 512,
     useFile: true
   }
@@ -19,7 +14,6 @@ const settings = {
 
 const ctx = new window.AudioContext()
 let analyzers = []
-let file = null
 
 export function getDeviceSources () {
   return navigator.mediaDevices.enumerateDevices()
@@ -28,7 +22,7 @@ export function getDeviceSources () {
     }))
 }
 
-export function setRealtimeAnalyzer (device) {
+export function setRealtimeAnalyzer ({ device, index }) {
   getusermedia({
     video: false,
     audio: {
@@ -40,60 +34,44 @@ export function setRealtimeAnalyzer (device) {
     if (err) {
       console.warn(err)
     } else {
-      addAnalyzer({ stream, index: -1 })
+      addAnalyzer({ stream, index })
     }
   })
 }
 
-export function addAnalyzer ({ stream, player, index }) {
-  index++ // (poorly) make sure realtime device is index 0 and tracks are 1+
-  if (!analyzers[index]) {
-    if (!stream && !player) {
-      console.error('no stream or player provided.')
-    } else if (!stream && player) {
-      stream = player.captureStream()
-    }
+export function addAnalyzer ({ stream, index }) {
+  if (stream) {
     const source = ctx.createMediaStreamSource(stream)
-    analyzers[index] = Meyda.createMeydaAnalyzer({
-      source,
-      audioContext: ctx,
-      bufferSize: settings.audio.bufferSize,
-      featureExtractors: settings.audio.featureExtractors,
-      callback: (datas) => {
-        if (datas.rms > store.state.audio.threshold) {
-          console.log(index, datas)
-          store.state.output.file && file.write(JSON.stringify(datas))
-          store.state.output.spacebro && spacebro.send(datas)
+    if (analyzers[index]) {
+      analyzers[index].setSource(source)
+    } else {
+      analyzers[index] = Meyda.createMeydaAnalyzer({
+        source,
+        audioContext: ctx,
+        bufferSize: settings.audio.bufferSize,
+        featureExtractors: store.state.audio.tracks[index].features,
+        callback: (datas) => {
+          // console.log(index, datas)
+          console.log(datas)
         }
-      }
-    })
+      })
+    }
+  } else {
+    console.error('no stream provided.')
   }
 }
 
 export function removeAnalyzer (index) {
-  analyzers[index] = null
+  analyzers.splice(index, 1)
 }
 
 export function start () {
-  if (store.state.output.file) {
-    const storeFilename = store.state.output.filepath.name
-    const storeFilefolder = store.state.output.filepath.folder
-
-    const filename = storeFilename ? `${storeFilename}.json` : `aio-output-${Date.now()}.json`
-    const folder = storeFilefolder || './'
-    const filepath = path.resolve(folder, filename)
-    console.log(filepath)
-
-    file = fs.createWriteStream(filepath)
-    file.write('[')
-  }
-  analyzers.forEach((analyzer) => analyzer && analyzer.start())
+  analyzers.forEach((analyzer, index) => {
+    const features = store.state.audio.tracks[index].features
+    analyzer && analyzer.start(features)
+  })
 }
 
 export function stop () {
   analyzers.forEach((analyzer) => analyzer && analyzer.stop())
-  if (store.state.output.file) {
-    file.write(']')
-    file.end()
-  }
 }

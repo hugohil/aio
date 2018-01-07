@@ -1,7 +1,7 @@
 {
   "name": "aio",
   "productName": "aio",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "hugohil <mail@hugohil.online>",
   "description": "Realtime audio analysis tool",
   "license": null,
@@ -28,7 +28,6 @@
     "getusermedia": "^2.0.1",
     "lodash": "^4.17.4",
     "meyda": "^4.0.5",
-    "spacebro-client": "^0.4.2",
     "standard-settings": "^1.1.8",
     "vue": "^2.5.8",
     "vue-electron": "^1.0.6",

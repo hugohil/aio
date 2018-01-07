@@ -1,11 +1,14 @@
 <template>
   <div id="wrapper">
-    <header><h1>a.io</h1></header>
+    <header class="aio__header">
+      <h1>a.io</h1>
+    </header>
     <main>
-      <aio-inputs></aio-inputs>
-      <aio-tools></aio-tools>
-      <aio-visualizer></aio-visualizer>
-      <aio-output></aio-output>
+      <aio-settings></aio-settings>
+      <aio-track v-for="index in tracks"
+        :trackIndex="index"
+        :key="index"
+      ></aio-track>
     </main>
   </div>
 </template>
@@ -14,49 +17,22 @@
   export default {
     name: 'aio',
     components: {
-      'aio-inputs': require('@/components/Inputs').default,
-      'aio-tools': require('@/components/Tools').default,
-      'aio-visualizer': require('@/components/Visualizer').default,
-      'aio-output': require('@/components/Output').default
+      'aio-settings': require('@/components/Settings').default,
+      'aio-track': require('@/components/Track').default
+    },
+    data () {
+      return {
+        tracks: 1
+      }
     },
     methods: {}
   }
 </script>
 
 <style>
-  #wrapper {
-    width: 100vw;
-    height: 100vh;
-    background: #FFF;
-    font-family: monospace;
-  }
-  h1 {
-    font-weight: 700;
-  }
-  header {
-    border-bottom: 1px solid #000;
-    padding: .3em;
-  }
-  #wrapper main {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    height: 100%;
-  }
-  #wrapper main > div {
-    border-left: 1px solid #000;
-    border-top: 1px solid #000;
-    box-sizing: border-box;
-    min-width: 50%;
-    height: 50%;
-    margin: 0;
-    padding: .3em;
-  }
-  #wrapper main > div:nth-child(odd) {
-    border-left: none;
-  }
-  .icon--button {
-    font-size: 1.25em;
-    vertical-align: text-bottom;
-  }
+.aio__header {
+  margin: 0.5em 1em;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
 </style>

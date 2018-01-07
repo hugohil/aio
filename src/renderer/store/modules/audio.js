@@ -6,10 +6,7 @@ const state = {
   computing: false,
   threshold: 0.05,
   devices: [],
-  tracks: {
-    realtime: null,
-    files: []
-  }
+  tracks: []
 }
 
 const initial = Object.assign({}, state)
@@ -18,14 +15,11 @@ const mutations = {
   INIT_DEVICES (state, devices) {
     state.devices = devices
   },
-  SELECT_DEVICE (state, device) {
-    state.tracks.realtime = device
-  },
-  ADD_FILE (state, { file, index }) {
-    state.tracks.files[index] = file
-  },
-  REMOVE_FILE (state, index) {
-    state.tracks.files.splice(index || -1, 1)
+  SELECT_DEVICE (state, { device, index }) {
+    // state.tracks[index].device && state.tracks.splice(index, 1) // ensure track is removed so observers get new value
+    typeof state.tracks[index] === 'object'
+      ? state.tracks[index].device = device
+      : state.tracks[index] = { device }
   },
   START_ANALYZERS (state) {
     state.computing = true
@@ -33,8 +27,10 @@ const mutations = {
   STOP_ANALYZERS (state) {
     state.computing = false
   },
-  UPDATE_THRESHOLD (state, threshold) {
-    state.threshold = threshold
+  UPDATE_FEATURES (state, { features, index }) {
+    typeof state.tracks[index] === 'object'
+      ? state.tracks[index].features = features
+      : state.tracks[index] = { features }
   },
   RESET_INPUT (state) {
     state = initial
@@ -42,19 +38,9 @@ const mutations = {
 }
 
 const actions = {
-  SELECT_DEVICE ({ commit, state }, device) {
-    commit('SELECT_DEVICE', device)
-    audio.setRealtimeAnalyzer(device)
-  },
-  ADD_FILE ({ commit, state }, { file, player, index }) {
-    player.addEventListener('play', () => {
-      audio.addAnalyzer({ player, index })
-    })
-    commit('ADD_FILE', { file, index })
-  },
-  REMOVE_FILE ({ commit, state }, index) {
-    audio.removeAnalyzer(index)
-    commit('REMOVE_FILE', index)
+  SELECT_DEVICE ({ commit, state }, track) {
+    commit('SELECT_DEVICE', track)
+    audio.setRealtimeAnalyzer(track)
   },
   START_ANALYZERS ({ commit, state }) {
     audio.start()
