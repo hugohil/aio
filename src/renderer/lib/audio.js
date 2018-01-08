@@ -52,7 +52,7 @@ export function addAnalyzer ({ stream, index }) {
         bufferSize: settings.audio.bufferSize,
         featureExtractors: store.state.audio.tracks[index].features,
         callback: (datas) => {
-          console.log(datas)
+          datas.rms > 0.05 && console.log(datas)
         }
       })
       store.commit('ADD_ANALYZER', { analyzer, index })
@@ -60,6 +60,10 @@ export function addAnalyzer ({ stream, index }) {
   } else {
     console.error('no stream provided.')
   }
+}
+
+export function updateChannel ({ channel, index }) {
+  store.state.audio.analyzers[index].setChannel(channel)
 }
 
 export function start () {

@@ -21,8 +21,13 @@ const mutations = {
       ? state.tracks[index].device = device
       : state.tracks[index] = { device }
   },
+  SELECT_CHANNEL (state, { channel, index }) {
+    typeof state.tracks[index] === 'object'
+      ? state.tracks[index].channel = channel
+      : state.tracks[index] = { channel }
+  },
   ADD_ANALYZER (state, { analyzer, index }) {
-    // store.state.audio.analyzers.splice(index, 1)
+    state.analyzers.splice(index, 1) // hack to force vuex to dispatch change to components
     state.analyzers[index] = analyzer
   },
   START_ANALYZERS (state) {
@@ -45,6 +50,10 @@ const actions = {
   SELECT_DEVICE ({ commit, state }, track) {
     commit('SELECT_DEVICE', track)
     audio.createRealtimeAnalyzer(track)
+  },
+  SELECT_CHANNEL ({ commit, state }, channel) {
+    commit('SELECT_CHANNEL', channel)
+    audio.updateChannel(channel)
   },
   START_ANALYZERS ({ commit, state }) {
     audio.start()

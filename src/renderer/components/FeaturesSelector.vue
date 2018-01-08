@@ -45,23 +45,26 @@ export default {
       }
     }
   },
+  computed: {
+    index () {
+      return (this.trackIndex - 1)
+    }
+  },
   methods: {
     removeAudioFeature () {
       this.features.selected.splice(-1, 1)
-      const index = (this.trackIndex - 1)
       this.$store.commit('SELECT_DEVICE', {
         features: this.features.selected,
-        index
+        index: this.index
       })
     },
     addAudioFeature () {
       this.features.selected.push('')
     },
     selectAudioFeature () {
-      const index = (this.trackIndex - 1)
       this.$store.commit('UPDATE_FEATURES', {
         features: this.features.selected,
-        index
+        index: this.index
       })
     }
   }
