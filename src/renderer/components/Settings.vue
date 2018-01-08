@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'settings',
+  name: 'aio-settings',
   computed: {
     devices () {
       return this.$store.state.audio.devices

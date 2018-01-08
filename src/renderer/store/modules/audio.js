@@ -5,6 +5,7 @@ import * as audio from '@/lib/audio'
 const state = {
   computing: false,
   threshold: 0.05,
+  analyzers: [],
   devices: [],
   tracks: []
 }
@@ -16,10 +17,13 @@ const mutations = {
     state.devices = devices
   },
   SELECT_DEVICE (state, { device, index }) {
-    // state.tracks[index].device && state.tracks.splice(index, 1) // ensure track is removed so observers get new value
     typeof state.tracks[index] === 'object'
       ? state.tracks[index].device = device
       : state.tracks[index] = { device }
+  },
+  ADD_ANALYZER (state, { analyzer, index }) {
+    // store.state.audio.analyzers.splice(index, 1)
+    state.analyzers[index] = analyzer
   },
   START_ANALYZERS (state) {
     state.computing = true
@@ -29,7 +33,7 @@ const mutations = {
   },
   UPDATE_FEATURES (state, { features, index }) {
     typeof state.tracks[index] === 'object'
-      ? state.tracks[index].features = features
+      ? state.tracks[index].features = features.filter(f => f.length)
       : state.tracks[index] = { features }
   },
   RESET_INPUT (state) {
@@ -40,7 +44,7 @@ const mutations = {
 const actions = {
   SELECT_DEVICE ({ commit, state }, track) {
     commit('SELECT_DEVICE', track)
-    audio.setRealtimeAnalyzer(track)
+    audio.createRealtimeAnalyzer(track)
   },
   START_ANALYZERS ({ commit, state }) {
     audio.start()

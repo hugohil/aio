@@ -13,7 +13,6 @@ const settings = {
 }
 
 const ctx = new window.AudioContext()
-let analyzers = []
 
 export function getDeviceSources () {
   return navigator.mediaDevices.enumerateDevices()
@@ -22,7 +21,7 @@ export function getDeviceSources () {
     }))
 }
 
-export function setRealtimeAnalyzer ({ device, index }) {
+export function createRealtimeAnalyzer ({ device, index }) {
   getusermedia({
     video: false,
     audio: {
@@ -42,36 +41,34 @@ export function setRealtimeAnalyzer ({ device, index }) {
 export function addAnalyzer ({ stream, index }) {
   if (stream) {
     const source = ctx.createMediaStreamSource(stream)
-    if (analyzers[index]) {
-      analyzers[index].setSource(source)
+    if (store.state.audio.analyzers[index]) {
+      store.state.audio.analyzers[index].setSource(source)
     } else {
-      analyzers[index] = Meyda.createMeydaAnalyzer({
+      const analyzer = Meyda.createMeydaAnalyzer({
         source,
         audioContext: ctx,
+        inputs: source.numberOfInputs,
+        outputs: source.numberOfOutputs,
         bufferSize: settings.audio.bufferSize,
         featureExtractors: store.state.audio.tracks[index].features,
         callback: (datas) => {
-          // console.log(index, datas)
           console.log(datas)
         }
       })
+      store.commit('ADD_ANALYZER', { analyzer, index })
     }
   } else {
     console.error('no stream provided.')
   }
 }
 
-export function removeAnalyzer (index) {
-  analyzers.splice(index, 1)
-}
-
 export function start () {
-  analyzers.forEach((analyzer, index) => {
+  store.state.audio.analyzers.forEach((analyzer, index) => {
     const features = store.state.audio.tracks[index].features
     analyzer && analyzer.start(features)
   })
 }
 
 export function stop () {
-  analyzers.forEach((analyzer) => analyzer && analyzer.stop())
+  store.state.audio.analyzers.forEach((analyzer) => analyzer && analyzer.stop())
 }
