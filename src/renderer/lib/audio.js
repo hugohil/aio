@@ -1,7 +1,8 @@
 'use strict'
 
 import store from '@/store'
-import Meyda from 'meyda'
+// import Meyda from 'meyda'
+import Meyda from '../../../../meyda'
 
 import getusermedia from 'getusermedia'
 
@@ -41,18 +42,19 @@ export function createRealtimeAnalyzer ({ device, index }) {
 export function addAnalyzer ({ stream, index }) {
   if (stream) {
     const source = ctx.createMediaStreamSource(stream)
+    source.channelCountMode = 'explicit'
+    console.log(source)
     if (store.state.audio.analyzers[index]) {
       store.state.audio.analyzers[index].setSource(source)
     } else {
       const analyzer = Meyda.createMeydaAnalyzer({
         source,
         audioContext: ctx,
-        inputs: source.numberOfInputs,
-        outputs: source.numberOfOutputs,
+        inputs: source.channelCount,
         bufferSize: settings.audio.bufferSize,
         featureExtractors: store.state.audio.tracks[index].features,
         callback: (datas) => {
-          datas.rms > 0.05 && console.log(datas)
+          datas.rms > 0.01 && console.log(datas)
         }
       })
       store.commit('ADD_ANALYZER', { analyzer, index })
