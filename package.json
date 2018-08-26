@@ -28,6 +28,7 @@
     "getusermedia": "^2.0.1",
     "lodash": "^4.17.4",
     "meyda": "meyda",
+    "spacebro-client": "^0.4.7",
     "standard-settings": "^1.1.8",
     "vue": "^2.5.13",
     "vue-electron": "^1.0.6",

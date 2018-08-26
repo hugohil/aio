@@ -53,7 +53,10 @@ export function addAnalyzer ({ stream, index }) {
         bufferSize: settings.audio.bufferSize,
         featureExtractors: store.state.audio.tracks[index].features,
         callback: (datas) => {
-          datas.rms > store.getters['currentThreshold'] && console.log(datas)
+          if (datas.rms > store.getters['currentThreshold']) {
+            console.log(datas)
+            store.commit('SEND_SB', datas)
+          }
         }
       })
       store.commit('ADD_ANALYZER', { analyzer, index })
