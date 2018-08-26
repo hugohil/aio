@@ -41,6 +41,9 @@ const mutations = {
       ? state.tracks[index].features = features.filter(f => f.length)
       : state.tracks[index] = { features }
   },
+  UPDATE_THRESHOLD (state, threshold) {
+    state.threshold = threshold
+  },
   RESET_INPUT (state) {
     state = initial
   }
@@ -62,11 +65,21 @@ const actions = {
   STOP_ANALYZERS ({ commit, state }) {
     audio.stop()
     commit('STOP_ANALYZERS')
+  },
+  UPDATE_THRESHOLD ({ commit, state }, threshold) {
+    commit('UPDATE_THRESHOLD', threshold)
+  }
+}
+
+const getters = {
+  currentThreshold: state => {
+    return state.threshold
   }
 }
 
 export default {
   state,
   mutations,
-  actions
+  actions,
+  getters
 }
