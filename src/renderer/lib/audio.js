@@ -1,8 +1,7 @@
 'use strict'
 
 import store from '@/store'
-// import Meyda from 'meyda'
-import Meyda from '../../../../meyda'
+import Meyda from 'meyda'
 
 import getusermedia from 'getusermedia'
 
