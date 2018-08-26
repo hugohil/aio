@@ -50,10 +50,10 @@
     </div>
     <div class="column__section column__section-content--inline settings__compute">
       <div class="column__section-title">
-        <h3>connect:</h3>
+        <h3>connection:</h3>
       </div>
       <div class="column__section-controls">
-        <button @click="connectSB">connect spacebro</button>
+        <button @click="connectSB">{{sbConnected ? 'dis' : ''}}connect spacebro</button>
       </div>
     </div>
   </div>
@@ -62,6 +62,11 @@
 <script>
 export default {
   name: 'aio-settings',
+  data () {
+    return {
+      sbConnected: false
+    }
+  },
   computed: {
     devices () {
       return this.$store.state.audio.devices
@@ -101,7 +106,9 @@ export default {
   },
   methods: {
     connectSB () {
-      this.$store.commit('CONNECT_SB')
+      !this.sbConnected && this.$store.commit('CONNECT_SB')
+      this.sbConnected && this.$store.commit('DISCONNECT_SB')
+      this.sbConnected = !this.sbConnected
     }
   }
 }

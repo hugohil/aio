@@ -1,18 +1,23 @@
 const { SpacebroClient } = require('spacebro-client')
 
-let client = null
+let client = new SpacebroClient({
+  host: 'spacebro.space',
+  port: 3333,
+  client: {
+    name: 'aio',
+    description: 'realtime audio analysis tool'
+  }
+})
 
 export function connect (host, port) {
-  client = new SpacebroClient({
-    host,
-    port,
-    client: {
-      name: 'aio',
-      description: 'realtime audio analysis tool'
-    }
-  })
+  client.connected && client.disconnect()
+  client.connect(host, port)
+}
+
+export function disconnect () {
+  client.disconnect()
 }
 
 export function send (datas) {
-  client.emit('aio-datas', datas)
+  client.connected && client.emit('aio-datas', datas)
 }

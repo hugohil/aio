@@ -19,6 +19,9 @@ const mutations = {
   CONNECT_SB (state) {
     spacebro.connect(state.address, state.port)
   },
+  DISCONNECT_SB (state) {
+    spacebro.disconnect()
+  },
   SEND_SB (state, datas) {
     spacebro.send(datas)
   },
