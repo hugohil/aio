@@ -16,7 +16,10 @@
         >{{ device.label }}</option>
       </select>
     </div>
-    <div class="column__section-selector track__device-selector">
+    <!-- channel selection is temporarly disable until
+    https://github.com/meyda/meyda/pull/226
+    is approved -->
+<!--     <div class="column__section-selector track__device-selector">
       <select v-model="channel"
         :disabled="computing"
         @change="setChannel"
@@ -29,7 +32,7 @@
           :value="(channel - 1)"
         >{{ (channel - 1) }}</option>
       </select>
-    </div>
+    </div> -->
   </div>
 </template>
 
