@@ -1,10 +1,11 @@
 'use strict'
 
-import * as spacebro from '@/lib/spacebro'
+import Vue from 'vue'
+import settings from '@/lib/settings'
 
 const state = {
-  address: 'spacebro.space',
-  port: 3333
+  address: settings.service.spacebro.host,
+  port: settings.service.spacebro.port
 }
 
 const initial = Object.assign({}, state)
@@ -17,13 +18,16 @@ const mutations = {
     state.port = port
   },
   CONNECT_SB (state) {
-    spacebro.connect(state.address, state.port)
+    let vue = new Vue()
+    vue.$spacebro.connect(state.address, state.port)
   },
   DISCONNECT_SB (state) {
-    spacebro.disconnect()
+    let vue = new Vue()
+    vue.$spacebro.disconnect()
   },
   SEND_SB (state, datas) {
-    spacebro.send(datas)
+    let vue = new Vue()
+    vue.$spacebro.emit('aio-datas', datas)
   },
   RESET_INPUT (state) {
     state = initial
