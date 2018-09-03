@@ -27,7 +27,7 @@
     "dat.gui": "^0.6.5",
     "getusermedia": "^2.0.1",
     "lodash": "^4.17.4",
-    "meyda": "meyda",
+    "meyda": "^4.1.3",
     "spacebro-client": "^0.4.7",
     "standard-settings": "^1.1.8",
     "vue": "^2.5.13",
