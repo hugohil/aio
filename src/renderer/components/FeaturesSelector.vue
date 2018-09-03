@@ -41,7 +41,7 @@ export default {
     return {
       features: {
         available: ['rms', 'energy', 'chroma'],
-        selected: ['']
+        selected: ['rms']
       }
     }
   },
@@ -49,6 +49,9 @@ export default {
     index () {
       return (this.trackIndex - 1)
     }
+  },
+  mounted () {
+    this.selectAudioFeature()
   },
   methods: {
     removeAudioFeature () {

@@ -51,7 +51,12 @@ export default {
     }
   },
   mounted () {
-    getDeviceSources().then(devices => { this.$store.commit('INIT_DEVICES', devices) })
+    getDeviceSources().then(devices => {
+      this.$store.commit('INIT_DEVICES', devices)
+      const defaultDevice = devices[0]
+      this.$store.dispatch('SELECT_DEVICE', { device: defaultDevice, index: this.index })
+      this.localdeviceID = defaultDevice.deviceId
+    })
   },
   data () {
     return {
