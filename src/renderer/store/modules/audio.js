@@ -1,10 +1,11 @@
 'use strict'
 
 import * as audio from '@/lib/audio'
+import settings from '@/lib/settings'
 
 const state = {
   computing: false,
-  threshold: 0.05,
+  threshold: settings.audio.threshold,
   analyzers: [],
   devices: [],
   tracks: []

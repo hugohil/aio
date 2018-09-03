@@ -1,4 +1,8 @@
 {
+  "audio" : {
+    "autoCompute": false,
+    "threshold": 0.05
+  },
   "window" : {
     "width": 1280,
     "height": 720,

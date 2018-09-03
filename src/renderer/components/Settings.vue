@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import settings from '@/lib/settings'
+
 export default {
   name: 'aio-settings',
   data () {
@@ -110,6 +112,11 @@ export default {
       this.sbConnected && this.$store.commit('DISCONNECT_SB')
       this.sbConnected = !this.sbConnected
     }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.computing = settings.audio.autoCompute
+    }, 1500)
   }
 }
 </script>
