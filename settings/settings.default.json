@@ -1,6 +1,7 @@
 {
   "audio" : {
     "autoCompute": false,
+    "autoDevice": "default",
     "threshold": 0.05
   },
   "window" : {

@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import settings from '@/lib/settings'
 import { getDeviceSources } from '@/lib/audio'
 
 export default {
@@ -53,9 +54,13 @@ export default {
   mounted () {
     getDeviceSources().then(devices => {
       this.$store.commit('INIT_DEVICES', devices)
-      const defaultDevice = devices[0]
-      this.$store.dispatch('SELECT_DEVICE', { device: defaultDevice, index: this.index })
-      this.localdeviceID = defaultDevice.deviceId
+      devices.forEach(device => {
+        console.log(device)
+        if (device.label.toLowerCase() === settings.audio.device.toLowerCase()) {
+          this.$store.dispatch('SELECT_DEVICE', { device, index: this.index })
+          this.localdeviceID = device.deviceId
+        }
+      })
     })
   },
   data () {
