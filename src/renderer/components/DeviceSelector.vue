@@ -55,17 +55,22 @@ export default {
     getDeviceSources().then(devices => {
       this.$store.commit('INIT_DEVICES', devices)
       devices.forEach(device => {
-        console.log(device)
         if (device.label.toLowerCase() === settings.audio.device.toLowerCase()) {
           this.$store.dispatch('SELECT_DEVICE', { device, index: this.index })
           this.localdeviceID = device.deviceId
         }
       })
+      console.log(this.localdeviceID)
+      if (this.localdeviceID === '') {
+        const defaultDevice = devices[0]
+        this.$store.dispatch('SELECT_DEVICE', { device: defaultDevice, index: this.index })
+        this.localdeviceID = defaultDevice.deviceId
+      }
     })
   },
   data () {
     return {
-      localdeviceID: {},
+      localdeviceID: '',
       channel: ''
     }
   },
