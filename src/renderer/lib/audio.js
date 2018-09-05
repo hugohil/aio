@@ -1,16 +1,15 @@
 'use strict'
 
 import store from '@/store'
+import settings from '@/lib/settings'
+
 import Meyda from 'meyda'
 
 import getusermedia from 'getusermedia'
 
-const settings = {
-  audio: {
-    bufferSize: 512,
-    useFile: true
-  }
-}
+const bufferSize = 512
+
+let isThresholdReset = false
 
 const ctx = new window.AudioContext()
 
@@ -50,12 +49,17 @@ export function addAnalyzer ({ stream, index }) {
         source,
         audioContext: ctx,
         inputs: source.channelCount,
-        bufferSize: settings.audio.bufferSize,
+        bufferSize,
         featureExtractors: store.state.audio.tracks[index].features,
         callback: (datas) => {
           if (datas.rms > store.getters['currentThreshold']) {
+            isThresholdReset = false
             console.log(datas)
             store.commit('SEND_SB', datas)
+          } else if (settings.audio.resetBelowThreshold && !isThresholdReset) {
+            console.log({ rms: 0 })
+            store.commit('SEND_SB', { rms: 0 })
+            isThresholdReset = true
           }
         }
       })

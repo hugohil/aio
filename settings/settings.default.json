@@ -2,7 +2,8 @@
   "audio" : {
     "autoCompute": false,
     "device": "default",
-    "threshold": 0.05
+    "threshold": 0.05,
+    "resetBelowThreshold": false
   },
   "window" : {
     "width": 1280,
