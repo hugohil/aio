@@ -5,6 +5,7 @@ import settings from '@/lib/settings'
 
 const state = {
   computing: false,
+  resetBelowThreshold: settings.audio.resetBelowThreshold,
   threshold: settings.audio.threshold,
   analyzers: [],
   devices: [],
@@ -45,6 +46,9 @@ const mutations = {
   UPDATE_THRESHOLD (state, threshold) {
     state.threshold = threshold
   },
+  UPDATE_RBT (state, rbt) {
+    state.resetBelowThreshold = rbt
+  },
   RESET_INPUT (state) {
     state = initial
   }
@@ -69,12 +73,18 @@ const actions = {
   },
   UPDATE_THRESHOLD ({ commit, state }, threshold) {
     commit('UPDATE_THRESHOLD', threshold)
+  },
+  UPDATE_RBT ({ commit, state }, rbt) {
+    commit('UPDATE_RBT', rbt)
   }
 }
 
 const getters = {
   currentThreshold: state => {
     return state.threshold
+  },
+  resetBelowThreshold: state => {
+    return state.resetBelowThreshold
   }
 }
 

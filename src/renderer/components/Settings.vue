@@ -14,6 +14,17 @@
         >
       </div>
     </div>
+    <div class="column__section column__section-content--inline settings__reset-below-threshold">
+      <div class="column__section-title">
+        <label for="reset-below-threshold-checkbox"><h3>reset below threshold:</h3></label>
+      </div>
+      <div class="column__section-controls">
+        <input type="checkbox"
+          v-model="resetBelowThreshold"
+          id="reset-below-threshold-checkbox"
+        >
+      </div>
+    </div>
     <div class="column__section settings__threshold">
       <div class="column__section-title">
         <label for="threshold-range"><h3>threshold ({{threshold}}):</h3></label>
@@ -79,6 +90,14 @@ export default {
       },
       set (computing) {
         this.$store.dispatch(computing ? 'START_ANALYZERS' : 'STOP_ANALYZERS')
+      }
+    },
+    resetBelowThreshold: {
+      get () {
+        return this.$store.state.audio.resetBelowThreshold
+      },
+      set (resetBelowThreshold) {
+        this.$store.dispatch('UPDATE_RBT', resetBelowThreshold)
       }
     },
     threshold: {

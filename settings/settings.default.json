@@ -3,7 +3,8 @@
     "autoCompute": false,
     "device": "default",
     "threshold": 0.05,
-    "resetBelowThreshold": false
+    "resetBelowThreshold": false,
+    "resetTimeout": 1000
   },
   "window" : {
     "width": 1280,

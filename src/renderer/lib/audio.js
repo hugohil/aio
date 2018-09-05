@@ -10,6 +10,7 @@ import getusermedia from 'getusermedia'
 const bufferSize = 512
 
 let isThresholdReset = false
+let resetTimeout = null
 
 const ctx = new window.AudioContext()
 
@@ -53,12 +54,15 @@ export function addAnalyzer ({ stream, index }) {
         featureExtractors: store.state.audio.tracks[index].features,
         callback: (datas) => {
           if (datas.rms > store.getters['currentThreshold']) {
-            isThresholdReset = false
+            clearTimeout(resetTimeout)
             console.log(datas)
             store.commit('SEND_SB', datas)
-          } else if (settings.audio.resetBelowThreshold && !isThresholdReset) {
-            console.log({ rms: 0 })
-            store.commit('SEND_SB', { rms: 0 })
+            isThresholdReset = false
+          } else if (store.getters['resetBelowThreshold'] && !isThresholdReset) {
+            resetTimeout = setTimeout(() => {
+              console.log({ rms: 0 })
+              store.commit('SEND_SB', { rms: 0 })
+            }, (settings.audio.resetTimeout || 500))
             isThresholdReset = true
           }
         }
